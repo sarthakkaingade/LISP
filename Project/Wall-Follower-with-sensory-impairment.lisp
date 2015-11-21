@@ -32,27 +32,11 @@
 
 (defun calc-sensors-impaired (currentloc) (prog (sensors s1 s2 s3 s4 s5 s6 s7 s8)
                                             (setq s1 0 s2 0 s3 0 s4 0 s5 0 s6 0 s7 0 s8 0)
-                                            (if (equal (first currentloc) (first outer-boundary)) (go first-row))
-                                      loop1
-                                            (if (equal (first currentloc) (second outer-boundary)) (go last-row))
-                                      loop2
-                                            (if (equal (second currentloc) (third outer-boundary)) (go first-column))
-                                      loop3
-                                            (if (equal (second currentloc) (fourth outer-boundary)) (go last-column))
-                                        out
+                                            (if (equal (first currentloc) (first outer-boundary)) (setq s2 1))
+                                            (if (equal (first currentloc) (second outer-boundary)) (setq s6 1))
+                                            (if (equal (second currentloc) (third outer-boundary)) (setq s8 1))
+                                            (if (equal (second currentloc) (fourth outer-boundary)) (setq s4 1))
                                             (return (list s1 s2 s3 s4 s5 s6 s7 s8))
-                                  first-row
-                                            (setq s2 1)
-                                            (go loop1)
-                                   last-row
-                                            (setq s6 1)
-                                            (go loop2)
-                               first-column
-                                            (setq s8 1)
-                                            (go loop3)
-                                last-column
-                                            (setq s4 1)
-                                            (go out)
                                            )
 )
 
@@ -102,7 +86,7 @@
                                       (setq prev-sensors '(0 0 0 0 0 0 0 0))
                                       (setq maxiterations (+ (* (first gridsize) (second gridsize)) (first gridsize)))
                                       (setq i 1)
-                                      (print 'WALL 'FOLLOWER 'WITH 'SENSORY 'IMPAIREMENT)
+                                      (print '(WALL FOLLOWER WITH SENSORY IMPAIREMENT))
                                       ;(print maxiterations)
                                  loop
                                       (if (equal firstboundaryhit 'nil) (go cboundary))
