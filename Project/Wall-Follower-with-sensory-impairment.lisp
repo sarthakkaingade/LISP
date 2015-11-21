@@ -1,11 +1,7 @@
 (setf gridsize '(6 6))
 (setf SI '(s1 s2 s3 s4 s5 s6 s7 s8))
-(setf FV '(x1 x2 x3 x4))
+(setf FV '(w1 w2 w3 w4 w5 w6 w7 w8))
 (setf outer-boundary '(1 6 1 6))
-;(setf x1 (+ s2 s3))
-;(setf x2 (+ s4 s5))
-;(setf x3 (+ s6 s7))
-;(setf x4 (+ s8 s1))
 
 (defun my-or (x y) (prog ()
                      (if (= x 1) (return 1))
@@ -33,30 +29,30 @@
                                      )
 )
 
-(defun calc-sensors (currentloc) (prog (sensors s1 s2 s3 s4 s5 s6 s7 s8)
-                                  (setq s1 0 s2 0 s3 0 s4 0 s5 0 s6 0 s7 0 s8 0)
-                                  (if (equal (first currentloc) (first outer-boundary)) (go first-row))
-                            loop1
-                                  (if (equal (first currentloc) (second outer-boundary)) (go last-row))
-                            loop2
-                                  (if (equal (second currentloc) (third outer-boundary)) (go first-column))
-                            loop3
-                                  (if (equal (second currentloc) (fourth outer-boundary)) (go last-column))
-                              out
-                                  (return (list s1 s2 s3 s4 s5 s6 s7 s8))
-                        first-row
-                                  (setq s1 1 s2 1 s3 1)
-                                  (go loop1)
-                         last-row
-                                  (setq s5 1 s6 1 s7 1)
-                                  (go loop2)
-                     first-column
-                                  (setq s1 1 s8 1 s7 1)
-                                  (go loop3)
-                      last-column
-                                  (setq s3 1 s4 1 s5 1)
-                                  (go out)
-                                 )
+(defun calc-sensors-impaired (currentloc) (prog (sensors s1 s2 s3 s4 s5 s6 s7 s8)
+                                            (setq s1 0 s2 0 s3 0 s4 0 s5 0 s6 0 s7 0 s8 0)
+                                            (if (equal (first currentloc) (first outer-boundary)) (go first-row))
+                                      loop1
+                                            (if (equal (first currentloc) (second outer-boundary)) (go last-row))
+                                      loop2
+                                            (if (equal (second currentloc) (third outer-boundary)) (go first-column))
+                                      loop3
+                                            (if (equal (second currentloc) (fourth outer-boundary)) (go last-column))
+                                        out
+                                            (return (list s1 s2 s3 s4 s5 s6 s7 s8))
+                                  first-row
+                                            (setq s2 1)
+                                            (go loop1)
+                                   last-row
+                                            (setq s6 1)
+                                            (go loop2)
+                               first-column
+                                            (setq s8 1)
+                                            (go loop3)
+                                last-column
+                                            (setq s4 1)
+                                            (go out)
+                                           )
 )
 
 (defun calc-navigation-command (featurevector) (prog ()
