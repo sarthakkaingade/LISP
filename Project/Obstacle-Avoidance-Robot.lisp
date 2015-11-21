@@ -1,7 +1,7 @@
-(setf gridsize '(6 6))
+(setf gridsize '(8 8))
 (setf SI '(s1 s2 s3 s4 s5 s6 s7 s8))
 (setf FV '(x1 x2 x3 x4))
-(setf outer-boundary '(1 6 1 6))
+(setf outer-boundary '(1 8 1 8))
 
 (defun my-or (x y) (prog ()
                      (if (= x 1) (return 1))
