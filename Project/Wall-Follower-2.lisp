@@ -55,13 +55,14 @@
                                    )
 )
 
-(defun calc-navigation-command (featurevector) (prog ()
-                                                 (if (my-and (fourth featurevector) (my-not (first featurevector))) (return 'north))
-                                                 (if (my-and (third featurevector) (my-not (fourth featurevector))) (return 'west))
-                                                 (if (my-and (second featurevector) (my-not (third featurevector))) (return 'south))
-                                                 (if (my-and (first featurevector) (my-not (second featurevector))) (return 'east))
-                                                 (return 'north)
-                                                )
+;Rules to follow boundary anti-clockwise
+(defun calc-navigation-command-2 (featurevector) (prog ()
+                                                   (if (my-and (second featurevector) (my-not (first featurevector))) (return 'north))
+                                                   (if (my-and (first featurevector) (my-not (fourth featurevector))) (return 'west))
+                                                   (if (my-and (fourth featurevector) (my-not (third featurevector))) (return 'south))
+                                                   (if (my-and (third featurevector) (my-not (second featurevector))) (return 'east))
+                                                   (return 'north)
+                                                 )
 )
 
 (defun update-current-location (currentloc command) (prog ()
