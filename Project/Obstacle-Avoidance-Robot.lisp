@@ -61,6 +61,47 @@
                                  )
 )
 
+(defun calc-sensors-impaired-odd  (currentloc prev-command prev-sensors) (prog (s1 s2 s3 s4 s5 s6 s7 s8 i obstacle)
+                                                                           (setq s1 0 s2 0 s3 0 s4 0 s5 0 s6 0 s7 0 s8 0)
+                                                                           (setq i 0)
+                                                                           (if (equal (first currentloc) (first outer-boundary)) (setq s2 1))
+                                                                           (if (equal (first currentloc) (second outer-boundary)) (setq s6 1))
+                                                                           (if (equal (second currentloc) (third outer-boundary)) (setq s8 1))
+                                                                           (if (equal (second currentloc) (fourth outer-boundary)) (setq s4 1))
+                                                                      loop
+                                                                           (if (= i (length obstacles)) (go out))
+                                                                           (setq obstacle (nth i obstacles))
+                                                                           (if (= (first currentloc) (- (first obstacle) 1)) (go up))
+                                                                     loop1
+                                                                           (if (= (first currentloc) (+ (first obstacle) 1)) (go down))
+                                                                     loop2
+                                                                           (if (= (second currentloc) (- (second obstacle) 1)) (go left))
+                                                                     loop3
+                                                                           (if (= (second currentloc) (+ (second obstacle) 1)) (go right))
+                                                                     loop4
+                                                                           (setq i (+ i 1))
+                                                                           (go loop)
+                                                                        up
+                                                                           (if (= (second currentloc) (second obstacle)) (setq s6 1))
+                                                                           (go loop1)
+                                                                      down
+                                                                           (if (= (second currentloc) (second obstacle)) (setq s2 1))
+                                                                           (go loop2)
+                                                                      left
+                                                                           (if (= (first currentloc) (first obstacle)) (setq s4 1))
+                                                                           (go loop3)
+                                                                     right
+                                                                           (if (= (first currentloc) (first obstacle)) (setq s8 1))
+                                                                           (go loop4)
+                                                                       out
+                                                                           (if (equal prev-command 'east) (setq s1 (second prev-sensors)))
+                                                                           (if (equal prev-command 'south) (setq s3 (fourth prev-sensors)))
+                                                                           (if (equal prev-command 'west) (setq s5 (sixth prev-sensors)))
+                                                                           (if (equal prev-command 'north) (setq s7 (eighth prev-sensors)))
+                                                                           (return (list s1 s2 s3 s4 s5 s6 s7 s8))
+                                                                         )
+)
+
 (defun calc-navigation-command-obstacle (featurevector boundaryhit) (prog ()
                                                                       (if (equal boundaryhit 'nil) (go OA))
                                                                       (if (my-and (second featurevector) (my-not (fourth featurevector))) (return 'east))
@@ -126,3 +167,33 @@
                                                (go loop1)
                                              )
 )
+
+(defun wall-follow-obstacle-impaired-odd  (start-location) (prog (contourcompleted firstboundaryhit firstboundaryhitloc currentloc maxiterations i sensors navigatecommand prev-command prev-sensors)
+                                                             (setq firstboundaryhit nil)
+                                                             (setq firstboundaryhitloc nil)
+                                                             (setq currentloc start-location)
+                                                             (setq contourcompleted 'false)
+                                                             (setq maxiterations (* (* (first gridsize) (second gridsize)) 2))
+                                                             (setq i 1)
+                                                             ;(print maxiterations)
+                                                        loop
+                                                             (if (equal firstboundaryhit 'nil) (go cboundary))
+                                                       loop1
+                                                             (if (equal contourcompleted 'true) (return 'COMPLETED))
+                                                             (if (>= i maxiterations) (return 'MAXITERATIONS))
+                                                             (setq i (+ i 1))
+                                                             (setq sensors (calc-sensors-impaired-odd currentloc prev-command prev-sensors))
+                                                             (setq navigatecommand (calc-navigation-command-obstacle sensors firstboundaryhit))
+                                                             (setq currentloc (update-current-location currentloc navigatecommand))
+                                                             (print currentloc)
+                                                             (setq contourcompleted (checkcontour firstboundaryhitloc currentloc))
+                                                             (setq prev-command navigatecommand)
+                                                             (setq prev-sensors sensors)
+                                                             (go loop)
+                                                   cboundary
+                                                             (setq firstboundaryhit (checkboundary currentloc))
+                                                             (if (equal firstboundaryhit 'true) (setq firstboundaryhitloc currentloc))
+                                                             (go loop1)
+                                                           )
+)
+
