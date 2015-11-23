@@ -152,7 +152,7 @@
                                           loop
                                                (if (equal firstboundaryhit 'nil) (go cboundary))
                                          loop1
-                                               (if (equal contourcompleted 'true) (return 'COMPLETED))
+                                               (if (equal contourcompleted 'true) (return 'WALL-FOLLOWED-WITH-OBSTACLE-AVOIDANCE))
                                                (if (>= i maxiterations) (return 'MAXITERATIONS))
                                                (setq i (+ i 1))
                                                (setq sensors (calc-sensors currentloc))
@@ -179,7 +179,7 @@
                                                         loop
                                                              (if (equal firstboundaryhit 'nil) (go cboundary))
                                                        loop1
-                                                             (if (equal contourcompleted 'true) (return 'COMPLETED))
+                                                             (if (equal contourcompleted 'true) (return 'WALL-FOLLOWED-WITH-OBSTACLE-AVOIDANCE))
                                                              (if (>= i maxiterations) (return 'MAXITERATIONS))
                                                              (setq i (+ i 1))
                                                              (setq sensors (calc-sensors-impaired-odd currentloc prev-command prev-sensors))
