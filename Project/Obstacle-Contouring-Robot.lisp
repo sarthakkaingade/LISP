@@ -141,7 +141,7 @@
                                                              )
 )
 
-(defun wall-follow (start-location) (prog (contourcompleted firstboundaryhit firstboundaryhitloc currentloc maxiterations i sensors featurevector navigatecommand firstobstaclehit firstobstaclehitloc obstaclecompleted)
+(defun obstacle-follow (start-location) (prog (contourcompleted firstboundaryhit firstboundaryhitloc currentloc maxiterations i sensors featurevector navigatecommand firstobstaclehit firstobstaclehitloc obstaclecompleted)
                                       (setq firstboundaryhit nil)
                                       (setq firstboundaryhitloc nil)
                                       (setq firstobstaclehit nil)
