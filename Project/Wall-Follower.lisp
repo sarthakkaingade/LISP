@@ -109,7 +109,7 @@
                                                       )
 )
 
-;Function to check boundary
+;Function to wall follow
 ;INPUTS - Start location
 ;OUTPUTS - Wall Motion
 (defun wall-follow (start-location) (prog (contourcompleted firstboundaryhit firstboundaryhitloc currentloc maxiterations i sensors featurevector navigatecommand)
