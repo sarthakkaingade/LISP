@@ -2,20 +2,19 @@
 (setf SI '(s1 s2 s3 s4 s5 s6 s7 s8))
 (setf FV '(x1 x2 x3 x4))
 (setf outer-boundary '(1 6 1 6))
-;(setf x1 (+ s2 s3))
-;(setf x2 (+ s4 s5))
-;(setf x3 (+ s6 s7))
-;(setf x4 (+ s8 s1))
 
+;Boolean OR function
 (defun my-or (x y) (prog ()
                      (if (= x 1) (return 1))
                      (if (= y 1) (return 1))
                      (return 0)
-                    )
+                   )
 )
 
+;Boolean NOT function
 (defun my-not (l) (if (= l 0) 1 0))
 
+;Boolean AND function
 (defun my-and (x y) (prog ()
                       (if (= x 0) (return nil))
                       (if (= y 0) (return nil))
@@ -23,6 +22,9 @@
                     )
 )
 
+;Function to calculate feature vector
+;INPUTS - Sensor values lsit (s1 s2 s3 s4 s5 s6 s7 s8)
+;OUTPUTS - Feature vector list (x1 x2 x3 x4)
 (defun calc-feature-vector (inputs) (prog (x1 x2 x3 x4)
                                       (if (not (= (length inputs) (length SI))) (return nil))
                                       (setq x1 (my-or (nth 1 inputs) (nth 2 inputs)))
@@ -33,6 +35,9 @@
                                      )
 )
 
+;Function to simulate robot sensors
+;INPUTS - Current location
+;OUTPUTS - Sensor values lsit (s1 s2 s3 s4 s5 s6 s7 s8)
 (defun calc-sensors (currentloc) (prog (sensors s1 s2 s3 s4 s5 s6 s7 s8)
                                   (setq s1 0 s2 0 s3 0 s4 0 s5 0 s6 0 s7 0 s8 0)
                                   (if (equal (first currentloc) (first outer-boundary)) (go first-row))
@@ -59,6 +64,9 @@
                                  )
 )
 
+;Function to calculate actions based on production rules
+;INPUTS - Feature vector list (x1 x2 x3 x4)
+;OUTPUTS - Action North / South / East / West
 (defun calc-navigation-command (featurevector) (prog ()
                                                  (if (my-and (fourth featurevector) (my-not (first featurevector))) (return 'north))
                                                  (if (my-and (third featurevector) (my-not (fourth featurevector))) (return 'west))
@@ -68,6 +76,9 @@
                                                 )
 )
 
+;Function to update current location
+;INPUTS - Current location, Action
+;OUTPUTS - Updated location
 (defun update-current-location (currentloc command) (prog ()
                                                       (if (equal command 'north) (return (list (- (first currentloc) 1) (second currentloc))))
                                                       (if (equal command 'south) (return (list (+ (first currentloc) 1) (second currentloc))))
@@ -76,6 +87,9 @@
                                                      )
 )
 
+;Function to check boundary
+;INPUTS - Current location
+;OUTPUTS - True / False
 (defun checkboundary (currentloc) (prog ()
                                     (if (equal (first currentloc) (first outer-boundary)) (return 'true))
                                     (if (equal (first currentloc) (second outer-boundary)) (return 'true))
@@ -85,6 +99,9 @@
                                    )
 )
 
+;Function to check whether contouring completed or not
+;INPUTS - First boundary hit location, Current location
+;OUTPUTS - True / False
 (defun checkcontour (firstboundaryhitloc currentloc) (prog ()
                                                        (if (null firstboundaryhitloc) (return 'false))
                                                        (if (equal firstboundaryhitloc currentloc) (return 'true))
@@ -92,6 +109,9 @@
                                                       )
 )
 
+;Function to check boundary
+;INPUTS - Start location
+;OUTPUTS - Wall Motion
 (defun wall-follow (start-location) (prog (contourcompleted firstboundaryhit firstboundaryhitloc currentloc maxiterations i sensors featurevector navigatecommand)
                                       (setq firstboundaryhit nil)
                                       (setq firstboundaryhitloc nil)
@@ -120,5 +140,4 @@
                                       (go loop1)
                                     )
 )
-                                      
-                                  
+                         
