@@ -3,6 +3,7 @@
 (setf FV '(w1 w2 w3 w4 w5 w6 w7 w8))
 (setf outer-boundary '(1 6 1 6))
 
+;Boolean OR function
 (defun my-or (x y) (prog ()
                      (if (= x 1) (return 1))
                      (if (= y 1) (return 1))
@@ -10,8 +11,10 @@
                     )
 )
 
+;Boolean NOT function
 (defun my-not (l) (if (= l 0) 1 0))
 
+;Boolean AND function
 (defun my-and (x y) (prog ()
                       (if (= x 0) (return nil))
                       (if (= y 0) (return nil))
@@ -19,6 +22,9 @@
                     )
 )
 
+;Function to calculate feature vector
+;INPUTS - Sensor values lsit (s1 s2 s3 s4 s5 s6 s7 s8)
+;OUTPUTS - Feature vector list (w1 w2 w3 w4 w5 w6 w7 w8)
 (defun calc-feature-vector-impaired (inputs prev-command prev-inputs) (prog (w1 w2 w3 w4 w5 w6 w7 w8)
                                                                         (if (not (= (length inputs) (length SI))) (return nil))
                                                                         (setq w1 0 w2 (second inputs) w3 0 w4 (fourth inputs) w5 0 w6 (sixth inputs) w7 0 w8 (eighth inputs))
@@ -30,6 +36,9 @@
                                                                       )
 )
 
+;Function to simulate robot sensors
+;INPUTS - Current location
+;OUTPUTS - Sensor values lsit (s1 s2 s3 s4 s5 s6 s7 s8)
 (defun calc-sensors-impaired (currentloc) (prog (sensors s1 s2 s3 s4 s5 s6 s7 s8)
                                             (setq s1 0 s2 0 s3 0 s4 0 s5 0 s6 0 s7 0 s8 0)
                                             (if (equal (first currentloc) (first outer-boundary)) (setq s2 1))
@@ -40,6 +49,9 @@
                                            )
 )
 
+;Function to calculate actions based on production rules
+;INPUTS - Feature vector list (w1 w2 w3 w4 w5 w6 w7 w8)
+;OUTPUTS - Action North / South / East / West
 (defun calc-navigation-command-impaired (featurevector) (prog ()
                                                           (if (my-and (second featurevector) (my-not (fourth featurevector))) (return 'east))
                                                           (if (my-and (fourth featurevector) (my-not (sixth featurevector))) (return 'south))
@@ -53,6 +65,9 @@
                                                         )
 )
 
+;Function to update current location
+;INPUTS - Current location, Action
+;OUTPUTS - Updated location
 (defun update-current-location (currentloc command) (prog ()
                                                       (if (equal command 'north) (return (list (- (first currentloc) 1) (second currentloc))))
                                                       (if (equal command 'south) (return (list (+ (first currentloc) 1) (second currentloc))))
@@ -61,6 +76,9 @@
                                                      )
 )
 
+;Function to check boundary
+;INPUTS - Current location
+;OUTPUTS - True / False
 (defun checkboundary (currentloc) (prog ()
                                     (if (equal (first currentloc) (first outer-boundary)) (return 'true))
                                     (if (equal (first currentloc) (second outer-boundary)) (return 'true))
@@ -70,6 +88,9 @@
                                    )
 )
 
+;Function to check whether contouring completed or not
+;INPUTS - First boundary hit location, Current location
+;OUTPUTS - True / False
 (defun checkcontour (firstboundaryhitloc currentloc) (prog ()
                                                        (if (null firstboundaryhitloc) (return 'false))
                                                        (if (equal firstboundaryhitloc currentloc) (return 'true))
@@ -77,6 +98,9 @@
                                                       )
 )
 
+;Function to wall follow
+;INPUTS - Start location
+;OUTPUTS - Wall Motion
 (defun wall-follow-with-sensors-impaired (start-location) (prog (contourcompleted firstboundaryhit firstboundaryhitloc currentloc maxiterations i sensors featurevector navigatecommand prev-command prev-sensors)
                                       (setq firstboundaryhit nil)
                                       (setq firstboundaryhitloc nil)
