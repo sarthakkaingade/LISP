@@ -1,20 +1,23 @@
-(defun generate-jumping-peg (n) (prog (i lis)
+(defun generate-jumping-peg (n pos) (prog (i lis)
                                   (setq i 1)
                                   (setq size (- (* 2 n) 1))
                              loop
-                                  (if (= i (+ n 1)) (return lis))
+                                  (if (= i (+ n 1)) (go out))
                                   (setq list (generate-row i size))
                                   (setq lis (append lis list))
                                   (print list)
                                   (setq i (+ i 1))
                                   (go loop)
+                              out
+                                  (setq lis (myreplace lis pos '_))
+                                  (return lis)
                                 )
 )
 
 (defun generate-row (n size) (prog (i list middle)
                                (setq i (- n 1))
                                (setq middle (/ (+ size 1) 2))
-                               (loop for i from 1 to size do (setq list (append list (cons 'x nil))))
+                               (loop for i from 1 to size do (setq list (append list (cons '* nil))))
                                (if (= (mod n 2) 1) (setq list (myreplace list middle 'p)))
                                (if (> n 1) (go loop) (return list)) 
                           loop
