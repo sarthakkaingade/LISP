@@ -2,16 +2,28 @@
                                                   (setq i 1)
                                                   (setq size (- (* 2 n) 1))
                                              loop
-                                                  (if (= i (+ n 1)) (go out))
+                                                  (if (= i (+ n 1)) (go insert-elem2))
                                                   (setq list (generate-row i size elem1))
                                                   (setq lis (append lis list))
                                                   (print list)
                                                   (setq i (+ i 1))
                                                   (go loop)
-                                              out
+                                     insert-elem2
+                                                  (setq pos (calc-pos lis pos))
                                                   (setq lis (myreplace lis pos elem2))
                                                   (return lis)
                                                 )
+)
+
+(defun calc-pos (lis pos) (prog (p local_pos)
+                            (setq p 0)
+                            (setq i 0)
+                       loop
+                            (setq i (+ i 1))
+                            (setq local_pos (+ (position 'p lis :start (+ p 1) :test #'equal) 1))
+                            (setq p local_pos)
+                            (if (= i pos) (return local_pos) (go loop))
+                          )
 )
 
 (defun generate-row (n size element) (prog (i list middle)
