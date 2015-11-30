@@ -203,7 +203,7 @@
 
 ;Function to wall follow with obstacle avoidance
 ;INPUTS - Start location
-;OUTPUTS - Wall Motion
+;OUTPUTS - Robot Motion
 (defun wall-follow-obstacle (start-location) (prog (contourcompleted firstboundaryhit firstboundaryhitloc currentloc maxiterations i sensors navigatecommand)
                                                (setq firstboundaryhit nil)
                                                (setq firstboundaryhitloc nil)
@@ -233,7 +233,7 @@
 
 ;Function to wall follow with obstacle avoidance with (s2 s4 s6 s8) working properly
 ;INPUTS - Start location
-;OUTPUTS - Wall Motion
+;OUTPUTS - Robot Motion
 (defun wall-follow-obstacle-impaired-odd  (start-location) (prog (contourcompleted firstboundaryhit firstboundaryhitloc currentloc maxiterations i sensors navigatecommand prev-command prev-sensors)
                                                              (setq firstboundaryhit nil)
                                                              (setq firstboundaryhitloc nil)
@@ -266,7 +266,7 @@
 
 ;Function to wall follow with obstacle avoidance with (s1 s3 s5 s7) working properly
 ;INPUTS - Start location
-;OUTPUTS - Wall Motion
+;OUTPUTS - Robot Motion
 (defun wall-follow-obstacle-impaired-even  (start-location) (prog (contourcompleted firstboundaryhit firstboundaryhitloc currentloc maxiterations i sensors navigatecommand prev-command prev-sensors)
                                                              (setq firstboundaryhit nil)
                                                              (setq firstboundaryhitloc nil)

@@ -100,7 +100,7 @@
 
 ;Function to wall follow
 ;INPUTS - Start location
-;OUTPUTS - Wall Motion
+;OUTPUTS - Robot Motion
 (defun wall-follow-with-sensors-impaired (start-location) (prog (contourcompleted firstboundaryhit firstboundaryhitloc currentloc maxiterations i sensors featurevector navigatecommand prev-command prev-sensors)
                                       (setq firstboundaryhit nil)
                                       (setq firstboundaryhitloc nil)
