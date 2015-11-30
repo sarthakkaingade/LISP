@@ -1,9 +1,9 @@
 (setf gridsize '(8 8))
 (setf SI '(s1 s2 s3 s4 s5 s6 s7 s8))
-(setf FV '(x1 x2 x3 x4))
 (setf outer-boundary '(1 8 1 8))
 (setf obstacles '((3 4) (3 5) (3 6) (5 3) (5 4)))
 
+;Boolean OR function
 (defun my-or (x y) (prog ()
                      (if (= x 1) (return 1))
                      (if (= y 1) (return 1))
@@ -11,8 +11,10 @@
                     )
 )
 
+;Boolean NOT function
 (defun my-not (l) (if (= l 0) 1 0))
 
+;Boolean AND function
 (defun my-and (x y) (prog ()
                       (if (= x 0) (return nil))
                       (if (= y 0) (return nil))
@@ -20,6 +22,9 @@
                     )
 )
 
+;Function to simulate robot sensors
+;INPUTS - Current location
+;OUTPUTS - Sensor values list (s1 s2 s3 s4 s5 s6 s7 s8)
 (defun calc-sensors (currentloc) (prog (s1 s2 s3 s4 s5 s6 s7 s8 i obstacle)
                                   (setq s1 0 s2 0 s3 0 s4 0 s5 0 s6 0 s7 0 s8 0)
                                   (setq i 0)
@@ -61,6 +66,9 @@
                                  )
 )
 
+;Function to simulate robot sensors with (s2 s4 s6 s8) working properly
+;INPUTS - Current location
+;OUTPUTS - Sensor values list (s1 s2 s3 s4 s5 s6 s7 s8)
 (defun calc-sensors-impaired-odd  (currentloc prev-command prev-sensors) (prog (s1 s2 s3 s4 s5 s6 s7 s8 i obstacle)
                                                                            (setq s1 0 s2 0 s3 0 s4 0 s5 0 s6 0 s7 0 s8 0)
                                                                            (setq i 0)
@@ -102,6 +110,9 @@
                                                                          )
 )
 
+;Function to simulate robot sensors with (s1 s3 s5 s7) working properly
+;INPUTS - Current location
+;OUTPUTS - Sensor values list (s1 s2 s3 s4 s5 s6 s7 s8)
 (defun calc-sensors-impaired-even (currentloc prev-command prev-sensors boundaryhit) (prog (s1 s2 s3 s4 s5 s6 s7 s8 i obstacle)
                                                                                        (setq s1 0 s2 0 s3 0 s4 0 s5 0 s6 0 s7 0 s8 0)
                                                                                        (setq i 0)
@@ -139,6 +150,9 @@
                                                                                      )
 )
 
+;Function to calculate actions based on production rules
+;INPUTS - Sensor values list (s1 s2 s3 s4 s5 s6 s7 s8)
+;OUTPUTS - Action North / South / East / West
 (defun calc-navigation-command-obstacle (featurevector boundaryhit) (prog ()
                                                                       (if (equal boundaryhit 'nil) (go OA))
                                                                       (if (my-and (second featurevector) (my-not (fourth featurevector))) (return 'east))
@@ -154,6 +168,9 @@
                                                                     )
 )
 
+;Function to update current location
+;INPUTS - Current location, Action
+;OUTPUTS - Updated location
 (defun update-current-location (currentloc command) (prog ()
                                                       (if (equal command 'north) (return (list (- (first currentloc) 1) (second currentloc))))
                                                       (if (equal command 'south) (return (list (+ (first currentloc) 1) (second currentloc))))
@@ -162,6 +179,9 @@
                                                      )
 )
 
+;Function to check boundary
+;INPUTS - Current location
+;OUTPUTS - True / False
 (defun checkboundary (currentloc) (prog ()
                                     (if (equal (first currentloc) (first outer-boundary)) (return 'true))
                                     (if (equal (first currentloc) (second outer-boundary)) (return 'true))
@@ -171,6 +191,9 @@
                                    )
 )
 
+;Function to check whether contouring completed or not
+;INPUTS - First boundary hit location, Current location
+;OUTPUTS - True / False
 (defun checkcontour (firstboundaryhitloc currentloc) (prog ()
                                                        (if (null firstboundaryhitloc) (return 'false))
                                                        (if (equal firstboundaryhitloc currentloc) (return 'true))
@@ -178,6 +201,9 @@
                                                       )
 )
 
+;Function to wall follow with obstacle avoidance
+;INPUTS - Start location
+;OUTPUTS - Wall Motion
 (defun wall-follow-obstacle (start-location) (prog (contourcompleted firstboundaryhit firstboundaryhitloc currentloc maxiterations i sensors navigatecommand)
                                                (setq firstboundaryhit nil)
                                                (setq firstboundaryhitloc nil)
@@ -205,6 +231,9 @@
                                              )
 )
 
+;Function to wall follow with obstacle avoidance with (s2 s4 s6 s8) working properly
+;INPUTS - Start location
+;OUTPUTS - Wall Motion
 (defun wall-follow-obstacle-impaired-odd  (start-location) (prog (contourcompleted firstboundaryhit firstboundaryhitloc currentloc maxiterations i sensors navigatecommand prev-command prev-sensors)
                                                              (setq firstboundaryhit nil)
                                                              (setq firstboundaryhitloc nil)
@@ -234,6 +263,10 @@
                                                            )
 )
 
+
+;Function to wall follow with obstacle avoidance with (s1 s3 s5 s7) working properly
+;INPUTS - Start location
+;OUTPUTS - Wall Motion
 (defun wall-follow-obstacle-impaired-even  (start-location) (prog (contourcompleted firstboundaryhit firstboundaryhitloc currentloc maxiterations i sensors navigatecommand prev-command prev-sensors)
                                                              (setq firstboundaryhit nil)
                                                              (setq firstboundaryhitloc nil)
@@ -262,4 +295,3 @@
                                                              (go loop1)
                                                            )
 )
-
