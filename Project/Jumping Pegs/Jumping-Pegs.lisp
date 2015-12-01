@@ -1,4 +1,4 @@
-;Function to generate Jumping Peg Traingle
+;Function to generate Jumping Peg Triangle
 ;INPUTS - Depth, Space-position, Element-to-represent (E.g - "P"), Element-to-denote-space (E.g - "_")
 ;OUTPUTS - Single list containing jumping peg triangle
 (defun generate-jumping-peg (n pos elem1 elem2) (prog (i lis)
@@ -14,7 +14,7 @@
                                      insert-elem2
                                                   (setq pos (calc-pos lis pos))
                                                   (setq lis (myreplace lis pos elem2))
-                                                  (format t "~%Generated Peg Traingle")
+                                                  (format t "~%Generated Peg Triangle")
                                                   (print-peg lis n)
                                                   (return lis)
                                                 )
@@ -51,7 +51,7 @@
                                      )
 )
 
-;Function to replace element in peg traingle
+;Function to replace element in peg triangle
 ;INPUTS - Single list containing jumping peg triangle, position, Element-to-represent (E.g - "P")
 ;OUTPUTS - Single list containing replaced element in jumping peg triangle
 (defun myreplace (list pos element) (prog (l)
@@ -64,7 +64,7 @@
                                     )
 )
 
-;Function to print peg traingle
+;Function to print peg triangle
 ;INPUTS - Single list containing jumping peg triangle, depth
 ;OUTPUTS - Jumping peg triangle
 (defun print-peg (list depth) (prog (size l1 i start end)
