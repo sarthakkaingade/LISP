@@ -11,6 +11,8 @@
                                      insert-elem2
                                                   (setq pos (calc-pos lis pos))
                                                   (setq lis (myreplace lis pos elem2))
+                                                  (format t "~%Generated Peg Traingle")
+                                                  (print-peg lis n)
                                                   (return lis)
                                                 )
 )
@@ -56,7 +58,8 @@
                           (setq end size)
                      loop
                           (loop for i from start to (- end 1) do (setq l1 (append l1 (cons (nth i list) nil))))
-                          (print l1)
+                          ;(print l1)
+                          (format t "~%~a" l1)
                           (setq l1 '())
                           (if (= end (length list)) (return nil))
                           (setq start end)
@@ -75,7 +78,7 @@
                                         (setq graph (append graph (cons start-node nil)) open (append open (cons start-node nil)))
                                         (setq abc 0)
                                    loop
-                                        (if (null open) (return 'Goal-Not-Achieved))
+                                        (if (null open) (go unsuccessful-exit))
                                         (setq closed (append closed (cons (car open) nil)) open (cdr open))
                                         (if (= (count 'P (cddddr (car (last closed))) :test #'equal) 1) (go out))
                                         (setq temp-graph (expand (cddddr (car (last closed))) size))
@@ -100,9 +103,12 @@
                                         (setq open (secondary-sort open))
                                         (setq abc (+ abc 1))
                                         (if (not (>= abc 1999)) (go loop) (return 'MAX-ITERATIONS))
+                      unsuccessful-exit
+                                        (print 'Goal-Cannot-be-Achieved)
+                                        (return nil)
                                     out
                                         (multi-print (trace-path graph (car (last closed))) size)
-                                        (return 'Goal-Achieved)
+                                        (print 'Goal-Achieved)
                                     )
 )
 
@@ -181,7 +187,8 @@
                                   (setq temp list1)
                                   (setq i 0)
                              loop
-                                  (pprint (+ i 1))
+                                  (format t "~%~%MOVE ~a" (+ i 1))
+                                  ;(print (+ i 1))
                                   (print-peg (car temp) size)
                                   (setq temp (cdr temp))
                                   (setq i (+ i 1))
