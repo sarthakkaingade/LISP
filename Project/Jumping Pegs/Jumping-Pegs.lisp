@@ -1,3 +1,6 @@
+;Function to generate Jumping Peg Traingle
+;INPUTS - Depth, Space-position, Element-to-represent (E.g - "P"), Element-to-denote-space (E.g - "_")
+;OUTPUTS - Single list containing jumping peg triangle
 (defun generate-jumping-peg (n pos elem1 elem2) (prog (i lis)
                                                   (setq i 1)
                                                   (setq size (- (* 2 n) 1))
@@ -17,6 +20,9 @@
                                                 )
 )
 
+;Function to calculate position of space in list based on user input
+;INPUTS - Single list containing jumping peg triangle, space position
+;OUTPUTS - Position Number
 (defun calc-pos (lis pos) (prog (p local_pos)
                             (setq p 0)
                             (setq i 0)
@@ -28,6 +34,9 @@
                           )
 )
 
+;Function to generate each row of jumping peg triangle
+;INPUTS - Row number, size of row, Element-to-represent (E.g - "P")
+;OUTPUTS - Row list
 (defun generate-row (n size element) (prog (i list middle)
                                        (setq i (- n 1))
                                        (setq middle (/ (+ size 1) 2))
@@ -42,6 +51,9 @@
                                      )
 )
 
+;Function to replace element in peg traingle
+;INPUTS - Single list containing jumping peg triangle, position, Element-to-represent (E.g - "P")
+;OUTPUTS - Single list containing replaced element in jumping peg triangle
 (defun myreplace (list pos element) (prog (l)
                                       (setq i 1)
                                  loop
@@ -52,6 +64,9 @@
                                     )
 )
 
+;Function to print peg traingle
+;INPUTS - Single list containing jumping peg triangle, depth
+;OUTPUTS - Jumping peg triangle
 (defun print-peg (list depth) (prog (size l1 i start end)
                           (setq size (- (* 2 depth) 1))
                           (setq start 0)
@@ -68,11 +83,17 @@
                         )
 )
 
+;Main Function to solve jumping peg problem
+;INPUTS - Depth, Space Position
+;OUTPUTS - Result
 (defun jumping-pegs (depth space-pos) (prog ()
                                         (return (graph-search-astar (generate-jumping-peg depth space-pos 'P '_) depth))
                                       )
 )
 
+;Function for graph searching using astar algorithm
+;INPUTS -  Single list containing jumping peg triangle, Depth
+;OUTPUTS - Result
 (defun graph-search-astar (init size) (prog (graph open closed start-node temp-graph j node-count N P D F abc)
                                         (setq node-count 2 start-node (append (list '1 '-1 '0 (- (count 'P init :test #'equal) 1)) init))
                                         (setq graph (append graph (cons start-node nil)) open (append open (cons start-node nil)))
@@ -112,6 +133,9 @@
                                     )
 )
 
+;Function to sort OPEN list based on depth of node
+;INPUTS - OPEN list
+;OUTPUTS - Sorted OPEN list
 (defun secondary-sort (list1) (prog (temp-list result i j)
                                 (if (or (null list1) (= (length list1) 1)) (return list1))
                                 (setq i 0)
@@ -144,6 +168,9 @@
                               )
 )
 
+;Function to trace path from goal node to start node
+;INPUTS - Graph, Goal node
+;OUTPUTS - List containing traced path
 (defun trace-path (graph goal) (prog (path i count)
                                  (setq path (append path (cons goal nil)))
                                  (setq parent (cadr (car path)))
@@ -164,6 +191,9 @@
                                )
 )
 
+;Function to replace node
+;INPUTS - Graph, Node, position
+;OUTPUTS - Updated Graph
 (defun replace-node (graph node pos) (prog (i new-graph temp-node)
                                        (setq i 0)
                                        (setq temp-node (append (cons (car (nth pos graph)) 'nil) (cons (cadr node) 'nil) (cddr (nth pos graph))))
@@ -174,15 +204,9 @@
                                      )
 )
 
-(defun triangle-list (node) (prog (i temp)
-                              (setq i 0)
-                         loop
-                              (if (or (equal (nth i node) 'P) (equal (nth i node) '_)) (setq temp (append temp (cons (nth i node) nil))))
-                              (setq i (+ i 1))
-                              (if (= i (length node)) (return temp) (go loop))
-                            )
-)
-
+;Function to multiprint moves required to achieve goal
+;INPUTS - list containing traced path to start node from goal node, Size of each row
+;OUTPUTS - Print
 (defun multi-print (list1 size) (prog (i temp)
                                   (setq temp list1)
                                   (setq i 0)
@@ -196,6 +220,9 @@
                                 )
 )
 
+;Function to expand nodes
+;INPUTS - Peg Triangle, Depth
+;OUTPUTS - list of expanded nodes
 (defun expand (node size) (prog (successors pos dlu dru dld drd l r)
                             (setq pos (position '_ node :start 0  :test #'equal))
                             (if (not pos) (return successors))
@@ -212,6 +239,9 @@
                           )
 )
 
+;Function to check and return, if "P" is located at upper left diagonal position of "_"
+;INPUTS - Peg Triangle, position of "_", Depth
+;OUTPUTS - Successor node
 (defun diag-left-up (node pos size) (prog (temp)
                                       (setq i 0)
                                       (if (and (> (- pos (* 4 size)) 0) (not (equal '* (nth (- pos (* 4 size)) node))) (not (equal '_ (nth (- pos (* 4 size)) node))) (not (equal '* (nth (- pos (* 2 size)) node))) (not (equal '_ (nth (- pos (* 2 size)) node))) ) (go loop) (return nil))
@@ -228,6 +258,9 @@
                                     )
 )
 
+;Function to check and return, if "P" is located at lower right diagonal position of "_"
+;INPUTS - Peg Triangle, position of "_", Depth
+;OUTPUTS - Successor node
 (defun diag-right-down (node pos size) (prog (temp)
                                          (setq i 0)
                                          (if (and (< (+ pos (* 4 size)) (length node)) (not (equal '* (nth (+ pos (* 4 size)) node))) (not (equal '_ (nth (+ pos (* 4 size)) node))) (not (equal '* (nth (+ pos (* 2 size)) node))) (not (equal '_ (nth (+ pos (* 2 size)) node))) ) (go loop) (return nil))
@@ -244,6 +277,9 @@
                                        )
 )
 
+;Function to check and return, if "P" is located at upper right diagonal position of "_"
+;INPUTS - Peg Triangle, position of "_", Depth
+;OUTPUTS - Successor node
 (defun diag-right-up (node pos size) (prog (temp)
                                        (if (= pos (- (length node) 1)) (return nil))
                                        (setq i 0)
@@ -261,6 +297,9 @@
                                      )
 )
 
+;Function to check and return, if "P" is located at lower left diagonal position of "_"
+;INPUTS - Peg Triangle, position of "_", Depth
+;OUTPUTS - Successor node
 (defun diag-left-down (node pos size) (prog (temp)
                                         (setq i 0)
                                         (if (and (< (+ pos (- (* 4 size) 4)) (- (length node) 1)) (not (equal '* (nth (+ pos (- (* 4 size) 4)) node))) (not (equal '_ (nth (+ pos (- (* 4 size) 4)) node))) (not (equal '* (nth (+ pos (- (* 2 size) 2)) node))) (not (equal '_ (nth (+ pos (- (* 2 size) 2)) node))) ) (go loop) (return nil))
@@ -277,6 +316,9 @@
                                       )
 )
 
+;Function to check and return, if "P" is located at left position of "_"
+;INPUTS - Peg Triangle, position of "_", Depth
+;OUTPUTS - Successor node
 (defun left (node pos size) (prog (temp)
                               (setq i 0)
                               (if (and (> (- pos 4) (- (- pos (mod pos (- (* 2 size) 1))) 1)) (not (equal '* (nth (- pos 4) node))) (not (equal '_ (nth (- pos 4) node))) (not (equal '* (nth (- pos 2) node))) (not (equal '_ (nth (- pos 2) node))) ) (go loop) (return nil))
@@ -293,6 +335,9 @@
                             )
 )
 
+;Function to check and return, if "P" is located at right position of "_"
+;INPUTS - Peg Triangle, position of "_", Depth
+;OUTPUTS - Successor node
 (defun right (node pos size) (prog (temp)
                                (setq i 0)
                                (if (and (< (+ pos 4) (+ pos (- (- (* 2 size) 1) (mod pos (- (* 2 size) 1))))) (not (equal '* (nth (+ pos 4) node))) (not (equal '_ (nth (+ pos 4) node))) (not (equal '* (nth (+ pos 2) node))) (not (equal '_ (nth (+ pos 2) node))) ) (go loop) (return nil))
@@ -308,3 +353,4 @@
                                (return temp)
                              )
 )
+
