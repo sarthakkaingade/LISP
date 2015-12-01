@@ -40,7 +40,7 @@
 (defun generate-row (n size element) (prog (i list middle)
                                        (setq i (- n 1))
                                        (setq middle (/ (+ size 1) 2))
-                                       (loop for i from 1 to size do (setq list (append list (cons '* nil))))
+                                       (loop for i from 1 to size do (setq list (append list (cons '\. nil))))
                                        (if (= (mod n 2) 1) (setq list (myreplace list middle element)))
                                        (if (> n 1) (go loop) (return list)) 
                                   loop
