@@ -69,7 +69,7 @@
 )
 
 (defun jumping-pegs (depth space-pos) (prog ()
-                                        (graph-search-astar (generate-jumping-peg depth space-pos 'P '_) depth)
+                                        (return (graph-search-astar (generate-jumping-peg depth space-pos 'P '_) depth))
                                       )
 )
 
